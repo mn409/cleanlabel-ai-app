@@ -47,7 +47,7 @@ export async function analyzeFoodLabel(
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
 
   const userPrompt = `Please analyze this food ingredient label image. Extract all ingredients you can see, identify any red flag additives, assign a Glow Score, and provide your full assessment.
 
