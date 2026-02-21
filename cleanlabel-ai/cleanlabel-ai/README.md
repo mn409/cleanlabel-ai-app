@@ -4,6 +4,10 @@
 
 ---
 
+**Live Demo**
+
+https://cleanlabel-ai-app.vercel.app/
+
 ## ✨ Features
 
 - 📸 **Upload any label photo** — drag & drop or click to browse
@@ -22,7 +26,7 @@
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/cleanlabel-ai.git
+git clone https://github.com/mn409/cleanlabel-ai-app/tree/main/cleanlabel-ai/cleanlabel-ai.git
 cd cleanlabel-ai
 ```
 
