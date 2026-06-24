@@ -1,7 +1,6 @@
 'use client';
 // components/AnalysisView.tsx
 // Shows the full analysis result after AI scanning completes
-// Features: animated background color by score, slide-up drawer, red flags, swap card
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -20,7 +19,6 @@ export default function AnalysisView({ analysis, onReset }: AnalysisViewProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const meta = SCORE_META[analysis.glow_score];
 
-  // Auto-open drawer after a short delay for a nice reveal
   useEffect(() => {
     const timer = setTimeout(() => setDrawerOpen(true), 600);
     return () => clearTimeout(timer);
@@ -35,7 +33,8 @@ export default function AnalysisView({ analysis, onReset }: AnalysisViewProps) {
       className="min-h-screen pt-20 pb-12 px-6"
     >
       <div className="max-w-3xl mx-auto">
-        {/* ── Top bar: product name + reset ───────────────────── */}
+
+        {/* Top bar */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -43,7 +42,9 @@ export default function AnalysisView({ analysis, onReset }: AnalysisViewProps) {
           className="flex items-center justify-between mb-10"
         >
           <div>
-            <p className="text-xs font-body text-ink-muted uppercase tracking-widest mb-1">Analysis complete</p>
+            <p className="text-xs font-body text-ink-muted uppercase tracking-widest mb-1">
+              Analysis complete
+            </p>
             <h2 className="font-display text-xl font-semibold text-ink-primary leading-tight">
               {analysis.product_name}
             </h2>
@@ -59,44 +60,33 @@ export default function AnalysisView({ analysis, onReset }: AnalysisViewProps) {
           </motion.button>
         </motion.div>
 
-        {/* ── Glow Score Hero ──────────────────────────────────── */}
+        {/* Glow Score Hero */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="flex flex-col sm:flex-row items-center sm:items-start gap-8 mb-10"
         >
-          {/* The big score letter */}
           <div className="relative shrink-0">
             <motion.div
               initial={{ scale: 0, rotate: -10 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.3 }}
               className="w-28 h-28 rounded-3xl flex items-center justify-center shadow-soft"
-              style={{
-                backgroundColor: meta.bg,
-                border: `2px solid ${meta.border}`,
-              }}
+              style={{ backgroundColor: meta.bg, border: `2px solid ${meta.border}` }}
             >
-              <span
-                className="score-badge text-6xl leading-none"
-                style={{ color: meta.text }}
-              >
+              <span className="score-badge text-6xl leading-none" style={{ color: meta.text }}>
                 {analysis.glow_score}
               </span>
             </motion.div>
             <span className="absolute -bottom-2 -right-2 text-2xl">{meta.emoji}</span>
           </div>
 
-          {/* Score details */}
           <div className="flex-1 text-center sm:text-left">
             <div className="flex items-center justify-center sm:justify-start gap-2 mb-3">
               <span
                 className="text-xs font-body font-semibold uppercase tracking-widest px-2.5 py-1 rounded-full"
-                style={{
-                  color: meta.text,
-                  backgroundColor: meta.border,
-                }}
+                style={{ color: meta.text, backgroundColor: meta.border }}
               >
                 {meta.label}
               </span>
@@ -105,8 +95,6 @@ export default function AnalysisView({ analysis, onReset }: AnalysisViewProps) {
             <p className="font-display text-2xl font-medium text-ink-primary mb-3 italic leading-snug">
               &ldquo;{analysis.vibe_check}&rdquo;
             </p>
-
-            {/* Quick stats row */}
             <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
               <StatPill
                 value={analysis.red_flags.length}
@@ -123,7 +111,7 @@ export default function AnalysisView({ analysis, onReset }: AnalysisViewProps) {
           </div>
         </motion.div>
 
-        {/* ── Results Drawer ───────────────────────────────────── */}
+        {/* Results Drawer */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -131,7 +119,6 @@ export default function AnalysisView({ analysis, onReset }: AnalysisViewProps) {
           className="rounded-2xl overflow-hidden border shadow-soft"
           style={{ borderColor: meta.border, backgroundColor: 'rgba(255,255,255,0.7)' }}
         >
-          {/* Drawer header (toggle) */}
           <button
             onClick={() => setDrawerOpen(!drawerOpen)}
             className="w-full flex items-center justify-between px-6 py-4 hover:bg-white/40 transition-colors"
@@ -146,7 +133,6 @@ export default function AnalysisView({ analysis, onReset }: AnalysisViewProps) {
             )}
           </button>
 
-          {/* Drawer content (animated) */}
           <motion.div
             initial={false}
             animate={{ height: drawerOpen ? 'auto' : 0 }}
@@ -154,7 +140,8 @@ export default function AnalysisView({ analysis, onReset }: AnalysisViewProps) {
             className="overflow-hidden"
           >
             <div className="px-6 pb-6 pt-2 space-y-8">
-              {/* Red Flags Section */}
+
+              {/* Red Flags */}
               <div id="red-flags">
                 <SectionLabel
                   icon="🚩"
@@ -169,11 +156,14 @@ export default function AnalysisView({ analysis, onReset }: AnalysisViewProps) {
                     </p>
                   </div>
                 ) : (
-                  <RedFlagsList redFlags={analysis.red_flags} />
+                  <RedFlagsList
+                    redFlags={analysis.red_flags}
+                    ingredientDetails={analysis.ingredient_details}
+                  />
                 )}
               </div>
 
-              {/* Suggested Swap Section */}
+              {/* Swap */}
               {analysis.suggested_swap && (
                 <div id="swaps">
                   <SectionLabel
@@ -192,13 +182,8 @@ export default function AnalysisView({ analysis, onReset }: AnalysisViewProps) {
   );
 }
 
-// ─── Sub-components ────────────────────────────────────────────────────────────
-
 function StatPill({
-  value,
-  label,
-  warn,
-  positive,
+  value, label, warn, positive,
 }: {
   value: number | string;
   label: string;
@@ -206,16 +191,10 @@ function StatPill({
   positive?: boolean;
 }) {
   return (
-    <div
-      className={`
-        flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-body
-        ${warn
-          ? 'bg-red-50 border-red-100 text-red-700'
-          : positive
-            ? 'bg-sage-50 border-sage-100 text-sage-600'
-            : 'bg-white border-[#E8E4DD] text-ink-secondary'
-        }
-      `}
+    <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-body
+      ${warn ? 'bg-red-50 border-red-100 text-red-700'
+        : positive ? 'bg-sage-50 border-sage-100 text-sage-600'
+        : 'bg-white border-[#E8E4DD] text-ink-secondary'}`}
     >
       <span className="font-semibold">{value}</span>
       <span>{label}</span>
@@ -223,15 +202,7 @@ function StatPill({
   );
 }
 
-function SectionLabel({
-  icon,
-  title,
-  subtitle,
-}: {
-  icon: string;
-  title: string;
-  subtitle: string;
-}) {
+function SectionLabel({ icon, title, subtitle }: { icon: string; title: string; subtitle: string }) {
   return (
     <div className="flex items-center justify-between mb-4">
       <div className="flex items-center gap-2">
