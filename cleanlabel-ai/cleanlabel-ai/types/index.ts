@@ -3,11 +3,21 @@
 
 export type GlowScore = 'A' | 'B' | 'C' | 'D';
 
+export interface IngredientDetail {
+  name: string;
+  what_it_is: string;
+  why_flagged: string;
+  regulatory_status: string;
+  source_label: string;
+  source_url: string;
+}
+
 export interface AnalysisResult {
   product_name: string;
   glow_score: GlowScore;
   vibe_check: string;
   red_flags: string[];
+  ingredient_details: IngredientDetail[];
   suggested_swap: string;
 }
 
@@ -70,7 +80,7 @@ export const SCORE_META: Record<GlowScore, {
   },
 };
 
-// Red flag additive dictionary — explains why each additive is concerning
+// Fallback additive dictionary — used when Gemini doesn't return details for a flag
 export const ADDITIVE_INFO: Record<string, string> = {
   'Soy Lecithin': 'An emulsifier derived from soy, often GMO. May cause digestive issues in sensitive individuals.',
   'Carrageenan': 'A seaweed-derived thickener linked to gut inflammation in some studies.',
